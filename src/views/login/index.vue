@@ -13,12 +13,12 @@
                 <el-button plain style="float:right">请输入验证码</el-button>
             </el-form-item>
             <el-form-item>
-                <el-chackbox>
+                <el-checkbox></el-checkbox>
                     我已阅读并同意
                     <el-button type="text">用户协议</el-button>
                     和
                     <el-button type="text">隐私条款</el-button>
-                </el-chackbox>
+
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" style="width:100%">点击登录</el-button>
