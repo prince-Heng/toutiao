@@ -23,7 +23,7 @@
                     <el-button type="text">用户协议</el-button>
                     和
                     <el-button type="text">隐私条款</el-button>
-
+<!-- 无意义操作，验证GitHub -->
             </el-form-item>
             <el-form-item>
                 <el-button @click="submitLogin" type="primary" style="width:100%">点击登录</el-button>
