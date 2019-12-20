@@ -34,6 +34,7 @@
 </template>
 
 <script>
+
 export default {
   data () {
     return {
@@ -67,9 +68,25 @@ export default {
   },
   methods: {
     submitLogin () {
-      this.$refs.myForm.validate(function (isOk) {
+      this.$refs.myForm.validate((isOk) => {
         if (isOk) {
-          console.log('校验成功，调用接口')
+          // 规则格式全部正确，就发送请求
+          this.$axios({
+            url: '/authorizations', // 请求地址
+            method: 'post', // 请求类型
+            data: this.loginForm// body参数
+          }).then(res => {
+            // console.log(res)
+            // 请求成功返回数据用token登陆，首先把token码缓存
+            window.localStorage.setItem('user-token', res.data.data.token)
+            this.$router.push('/home')
+          }).catch(() => {
+            // 请求不成功，根据elementUI设置警告
+            this.$message({
+              type: 'warning',
+              message: '账号或者密码错误'
+            })
+          })
         }
       })
     }
