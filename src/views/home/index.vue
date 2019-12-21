@@ -3,12 +3,17 @@
  <el-container>
    <!-- 侧边栏容器 -->
    <el-aside style="background-color:#353b4e;height:100vh;width:230px">
+     <!-- 侧边栏组件 -->
      <layout-aside></layout-aside>
    </el-aside>
    <!-- 右侧内容 -->
    <el-container>
      <!-- 右侧头部 -->
-      <el-header>我是头</el-header>
+     <el-header>
+       <!-- 头部组件 -->
+       <layout-header></layout-header>
+     </el-header>
+
       <!-- 右侧主体 -->
       <el-main>我是身体</el-main>
    </el-container>
@@ -17,9 +22,11 @@
 
 <script>
 import layoutAside from '../../components/home/layout-aside'
+import layoutHeader from '../../components/home/layout-header'
 export default {
   components: {
-    'layout-aside': layoutAside
+    'layout-aside': layoutAside,
+    'layout-header': layoutHeader
   }
 }
 </script>
