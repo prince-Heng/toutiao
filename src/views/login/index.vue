@@ -78,7 +78,7 @@ export default {
           }).then(res => {
             // console.log(res)
             // 请求成功返回数据用token登陆，首先把token码缓存
-            window.localStorage.setItem('user-token', res.data.data.token)
+            window.localStorage.setItem('user-token', res.data.token)
             this.$router.push('/home')
           }).catch(() => {
             // 请求不成功，根据elementUI设置警告
