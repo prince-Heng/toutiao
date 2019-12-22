@@ -15,7 +15,10 @@
      </el-header>
 
       <!-- 右侧主体 -->
-      <el-main>我是身体</el-main>
+      <el-main>
+        <!-- 二级容器 -->
+        <router-view></router-view>
+      </el-main>
    </el-container>
  </el-container>
 </template>
