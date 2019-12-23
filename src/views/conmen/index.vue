@@ -1,6 +1,6 @@
 <template>
    <!-- 卡片组件 -->
-   <el-card>
+   <el-card v-loading="loading">
        <!-- 面包屑 -->
        <bread-crumb slot="header">
        <!-- 插槽 -->
@@ -28,7 +28,18 @@
                 </template>
             </el-table-column>
         </el-table>
+          <el-row type="flex" justify="center" align="middle" style="height:80px">
+            <el-pagination
+            :current-page='page.currentPage'
+            :page-size="page.pageSize"
+            :total="page.total"
+            @current-change="changePage"
+            background
+            layout="prev, pager, next">
+            </el-pagination>
+          </el-row>
    </el-card>
+
 </template>
 
 <script>
@@ -36,16 +47,32 @@ export default {
 // 想要获取评论数据，首先要定义一个属性去接收数据 属性定义在data中
   data () {
     return {
-      list: []
+      list: [],
+      page: {
+        // 文章页数属性，分页用
+        total: 0, // 总页数
+        currentPage: 1, // 当前页默认设置为第一页
+        pageSize: 10
+      },
+      loading: false // 加载样式默认不打开
     }
   },
   methods: {
+    changePage (newPage) {
+      this.page.currentPage = newPage
+      this.getComment()
+    },
     getComment () {
+      // 发送请求前打开加载样式
+      this.loading = true
       this.$axios({
         url: '/articles',
-        params: { response_type: 'comment' }
+        params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
       }).then(res => {
         this.list = res.data.results
+        this.page.total = res.data.total_count
+        // 在请求成功后关闭加载样式
+        setTimeout(() => { this.loading = false }, 200)
       })
     },
     formatterBoolean (row, column, cellValue, index) {
