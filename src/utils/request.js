@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import router from '../router'
+import JSONBig from 'json-bigint'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'// 配置默认接口地址
 // 请求拦截器  请求之后，到达后台之前，对token注入到config
 axios.interceptors.request.use(function (config) {
@@ -12,10 +13,16 @@ axios.interceptors.request.use(function (config) {
   //   console.log(config)
 
   return config
-}, function (error) {
+}, function () {
   // 请求失败
-  return Promise.reject(error)
+
 })
+// 请求之后得到的数据中可能会含有超出安全范围的数据。这个数据是axios自动调用JSON.parse()方法转化
+// 现在 使用自定义的方式来转换数据
+axios.defaults.transformResponse = [function (data) {
+  // data 是响应回数据 字符串
+  return data ? JSONBig.parse(data) : {} // 解决js处理大数字失真问题
+}]
 // 响应拦截  响应数据回来 到达then之前
 axios.interceptors.response.use(function (response) {
 // 响应成功
@@ -43,5 +50,6 @@ axios.interceptors.response.use(function (response) {
     default: break
   }
   Message({ type: 'warning', message })
+  return Promise.reject(error)
 })
 export default axios

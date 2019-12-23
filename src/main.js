@@ -7,7 +7,7 @@ import './styles/index.less' // 引入默认的css样式
 import Component from './components/home'
 import './promission'
 import axios from './utils/request'
-axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'// 配置默认接口地址
+
 Vue.prototype.$axios = axios // 将axios赋值给全局的属性，任何位置都可以使用
 Vue.config.productionTip = false
 Vue.use(ElementUI)// 手动全局注册

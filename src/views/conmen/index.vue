@@ -22,7 +22,9 @@
                 <!-- 通过作用于插槽获取当前行的数据判断显示关闭还是打开 -->
                 <template slot-scope="obj">
                     <el-button size="small" type ="text">修改</el-button>
-                    <el-button @click="openOrClose" size="small" type ="text">{{obj.row.comment_status ? "关闭" : "打开"}}评论</el-button>
+                    <el-button @click="openOrClose(obj.row)" size="small" type ="text">
+                      {{obj.row.comment_status ? "关闭" : "打开"}}评论
+                      </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -59,9 +61,11 @@ export default {
       this.$confirm(`您确定要${mess}评论吗`, '提示').then((res) => {
         this.$axios({
           url: '/comments/status',
-          methods: 'PUT', // 请求类型
-          params: { article_id: row.id }, // 请求参数
+          method: 'PUT', // 请求类型
+          params: { article_id: row.id.toString() }, // 请求参数
           data: { allow_comment: !row.comment_status }
+        }).then(result => {
+          this.getComment()
         })
       })
     }
