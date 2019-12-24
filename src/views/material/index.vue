@@ -14,8 +14,8 @@
           <el-card class="img-card" v-for="item in list" :key="item.id" >
             <img :src="item.url" alt />
             <el-row class="operation" align="middle" type="flex" justify="space-around">
-              <i class="el-icon-star-on"></i>
-              <i class="el-icon-delete-solid"></i>
+              <i @click="collectOrCancel(item)"  :style="{color:item.is_collected ? 'red' : '#000'}" class="el-icon-star-on"></i>
+              <i @click="dleMaterial(item.id)" class="el-icon-delete-solid"></i>
             </el-row>
           </el-card>
         </div>
@@ -56,6 +56,28 @@ export default {
     }
   },
   methods: {
+    // 删除
+    dleMaterial (id) {
+      this.$confirm('您确定要删除图片吗').then(res => {
+        this.$axios({
+          url: `/user/images/${id}`,
+          method: 'delete'
+        }).then(res => {
+          this.getMaterial()
+        })
+      })
+    },
+    // 收藏或取消
+    collectOrCancel (item) {
+      this.$axios({
+        url: `/user/images/${item.id}`,
+        method: 'PUT',
+        data: { collect: !item.is_collected }// 收藏就取消，没收藏就收藏
+      }).then(res => {
+        this.getMaterial()
+      })
+    },
+    // 上传文件
     uploatImg (params) {
       this.loading = true
       let data = new FormData()
@@ -67,7 +89,7 @@ export default {
         data
       }).then(res => {
         this.loading = false
-        this.getComment()
+        this.getMaterial()
       })
     },
     // 切换标签页事件
@@ -123,6 +145,9 @@ export default {
       width: 100%;
       height: 40px;
       background-color: #f4f5f6;
+      i{
+        cursor:pointer
+      }
     }
   }
 }
