@@ -61,7 +61,7 @@
           <div class='right'>
               <span @click="toModify(item.id)"><i class="el-icon-edit"></i>修改</span>
               <!-- 注册删除按钮事件 -->
-              <span @click="delMaterial(item.id)"><i class="el-icon-delete"></i>删除</span>
+              <span @click="delArticles(item.id)"><i class="el-icon-delete"></i>删除</span>
           </div>
       </div>
       <el-row type='flex' justify="center" align="middle" style="height:60px">
@@ -143,6 +143,25 @@ export default {
     }
   },
   methods: {
+    // 删除文章
+    delArticles (id) {
+      // 人性化提示
+      this.$confirm('您确定要删除吗？').then(() => {
+        // 调用删除接口
+        this.$axios({
+          url: `/articles/${id.toString()}`,
+          method: 'delete'
+        }).then(res => {
+          // 删除成功提示
+          this.$message({
+            type: 'success',
+            message: '删除成功'
+          })
+          // 重新获取数据
+          this.getConditionArticle()
+        })
+      })
+    },
     //   改变页码方法
     changePage (newPage) {
       this.page.currentPage = newPage // 最新页码
