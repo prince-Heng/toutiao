@@ -16,7 +16,8 @@ const routes = [
     children: [{ path: '', component: Home2 }, {
       path: 'comment', component: () => import('../views/conmen')
     }, { path: 'material', component: () => import('../views/material') },
-    { path: 'articles', component: () => import('../views/articles') }]
+    { path: 'articles', component: () => import('../views/articles') },
+    { path: 'publish', component: () => import('../views/publish') }]
 
   }, {
     path: '/login',
