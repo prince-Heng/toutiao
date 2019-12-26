@@ -27,8 +27,9 @@
               </el-select>
           </el-form-item>
           <el-form-item>
-              <el-button @click="manualVerify" type="primary">发表</el-button>
-              <el-button @click="manualVerify">存入草稿</el-button>
+              <!-- 不传参为参数为undefined 为false -->
+              <el-button @click="publishArticle()" type="primary">发表</el-button>
+              <el-button @click="publishArticle(true)">存入草稿</el-button>
           </el-form-item>
       </el-form>
   </el-card>
@@ -66,12 +67,26 @@ export default {
         this.channels = result.data.channels
       })
     },
-    // 发布或者存稿手动校验是否符合规则
-    manualVerify () {
+    // 点击发布或者存稿手动校验是否符合规则
+    publishArticle (draft) {
       // 获取表单实例，验证规则方法  validate：function（isok）{}
       this.$refs.publishForm.validate(isOk => {
         if (isOk) {
-          console.log('校验通过')
+        //  如果成功了就调用接口
+          this.$axios({
+            url: '/articles',
+            method: 'POST',
+            params: { draft }, // 参数为true则为草稿，false为发布。通过传参来决定
+            data: this.formData// 请求体参数
+          }).then(res => {
+            // 人性化提示
+            this.$message({
+              type: 'success',
+              message: '保存成功'
+            })
+            // 跳转页面
+            this.$router.push('/home/articles')
+          })
         }
       })
     }
