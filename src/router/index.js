@@ -15,9 +15,11 @@ const routes = [
     component: Home,
     children: [{ path: '', component: Home2 }, {
       path: 'comment', component: () => import('../views/conmen')
-    }, { path: 'material', component: () => import('../views/material') },
+    }, { path: 'material', component: () => import('../views/material') }, // 文章列表
     { path: 'articles', component: () => import('../views/articles') },
-    { path: 'publish', component: () => import('../views/publish') }]
+    { path: 'publish', component: () => import('../views/publish') }, // 发布文章
+    { path: 'publish/:articleId', component: () => import('../views/publish') } // 修改文章
+    ]
 
   }, {
     path: '/login',

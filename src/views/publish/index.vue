@@ -58,6 +58,25 @@ export default {
       }
     }
   },
+  watch: {
+    //   当两个地址对应同一个组建的时候，跳转时组件不销毁，但是不会重置   此时用watch监听
+    $route: function (to, from) {
+      if (to.params.articleId) {
+        // 是修改
+      } else {
+        // 是发布
+        this.formData = {
+          title: '', // 文章标题
+          content: '', // 文章内容
+          cover: {
+            type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
+            images: [] // 放置封面地址的数组
+          },
+          channel_id: null // 频道id
+        }
+      }
+    }
+  },
   methods: {
     //   获取所有的频道
     getChannels () {
@@ -72,10 +91,11 @@ export default {
       // 获取表单实例，验证规则方法  validate：function（isok）{}
       this.$refs.publishForm.validate(isOk => {
         if (isOk) {
-        //  如果成功了就调用接口
+          let { articleId } = this.$route.params // 解构赋值获取动态路由参数
+          //  如果成功了就调用接口
           this.$axios({
-            url: '/articles',
-            method: 'POST',
+            url: articleId ? `/articles/${articleId}` : '/articles',
+            method: articleId ? 'put' : 'POST',
             params: { draft }, // 参数为true则为草稿，false为发布。通过传参来决定
             data: this.formData// 请求体参数
           }).then(res => {
@@ -89,10 +109,23 @@ export default {
           })
         }
       })
+    },
+    // 通过id查询文章数据
+    getArticleById (articleId) {
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then(result => {
+        this.loading = false
+        this.formData = result.data // 将数据赋值data
+      })
     }
   },
   created () {
     this.getChannels()
+    // 当修改文章的时候，直接获取数据
+    let { articleId } = this.$route.params // 解构赋值
+    // 当articleid存在的时候去修改
+    articleId && this.getArticleById(articleId)
   }
 }
 </script>
