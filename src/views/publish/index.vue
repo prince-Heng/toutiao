@@ -23,6 +23,7 @@
                   <el-radio :label="0">无图</el-radio>
                   <el-radio :label="-1">自动</el-radio>
               </el-radio-group>
+              {{formData.cover}}
           </el-form-item>
           <el-form-item label="频道" prop='channel_id'>
               <el-select  v-model="formData.channel_id">
@@ -50,7 +51,7 @@ export default {
         content: '', // 文章内容
         cover: {// 封面信息
           type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
-          images: []// 封面图片
+          images: []// 封面图片地址数组
         },
         channel_id: null// 文章所属频道id,默认不选中
       },
@@ -78,6 +79,16 @@ export default {
           },
           channel_id: null // 频道id
         }
+      }
+    },
+    // 通过watch监听formData中的cover的type数据变化从而改变视图
+    'formData.cover.type': function () {
+      if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
+        this.formData.cover.images = []// 无图或者空的状态
+      } else if (this.formData.cover.type === 1) {
+        this.formData.cover.images = ['']// 单图的状态
+      } else if (this.formData.cover.type === 3) {
+        this.formData.cover.images = ['', '', '']// 三图的状态
       }
     }
   },
