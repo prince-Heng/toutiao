@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading="loading">
       <bread-crumb slot="header">
       <template slot="title">发布文章</template>
       </bread-crumb>
@@ -10,10 +10,13 @@
           <el-form-item label="标题" prop='title'>
               <el-input  v-model="formData.title" style="width:60%"></el-input>
           </el-form-item>
-          <el-form-item label="内容" prop='content'>
-              <el-input  v-model="formData.content" style="width:60%" type="textarea" :rows="3"></el-input>
+           <el-form-item prop="content" label="内容">
+                <quill-editor
+                v-model="formData.content"
+                style="height:300px;margin-left:50px"
+                ></quill-editor>
           </el-form-item>
-          <el-form-item label="封面"  prop='cover'>
+          <el-form-item style="margin-top:150px" label="封面"  prop='cover'>
               <el-radio-group v-model="formData.cover.type">
                   <el-radio :label="1">单图</el-radio>
                   <el-radio :label="3">三图</el-radio>
@@ -39,6 +42,7 @@
 export default {
   data () {
     return {
+      loading: false,
       channels: [], // 接收频道数据
       // 设置表单的数据对象，需要将其内容字段绑定给标签
       formData: {
@@ -112,6 +116,7 @@ export default {
     },
     // 通过id查询文章数据
     getArticleById (articleId) {
+      this.loading = true
       this.$axios({
         url: `/articles/${articleId}`
       }).then(result => {
