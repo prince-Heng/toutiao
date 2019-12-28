@@ -17,14 +17,16 @@
                 ></quill-editor>
           </el-form-item>
           <el-form-item style="margin-top:150px" label="封面"  prop='cover'>
-              <el-radio-group v-model="formData.cover.type">
+              <el-radio-group change="changeType" v-model="formData.cover.type">
                   <el-radio :label="1">单图</el-radio>
                   <el-radio :label="3">三图</el-radio>
                   <el-radio :label="0">无图</el-radio>
                   <el-radio :label="-1">自动</el-radio>
               </el-radio-group>
-              {{formData.cover}}
           </el-form-item>
+            <!-- 封面组件 -->
+              <!-- 父传子  1. 自定义属性传值 -->
+              <cover-image :list="formData.cover.images"></cover-image>
           <el-form-item label="频道" prop='channel_id'>
               <el-select  v-model="formData.channel_id">
                   <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -80,9 +82,21 @@ export default {
           channel_id: null // 频道id
         }
       }
-    },
+    }
     // 通过watch监听formData中的cover的type数据变化从而改变视图
-    'formData.cover.type': function () {
+    // 'formData.cover.type': function () {
+    //   if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
+    //     this.formData.cover.images = []// 无图或者空的状态
+    //   } else if (this.formData.cover.type === 1) {
+    //     this.formData.cover.images = ['']// 单图的状态
+    //   } else if (this.formData.cover.type === 3) {
+    //     this.formData.cover.images = ['', '', '']// 三图的状态
+    //   }
+    // }
+  },
+  methods: {
+    // 点击获取图片
+    changeType () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
         this.formData.cover.images = []// 无图或者空的状态
       } else if (this.formData.cover.type === 1) {
@@ -90,9 +104,7 @@ export default {
       } else if (this.formData.cover.type === 3) {
         this.formData.cover.images = ['', '', '']// 三图的状态
       }
-    }
-  },
-  methods: {
+    },
     //   获取所有的频道
     getChannels () {
       this.$axios({
