@@ -15,7 +15,11 @@
 </el-pagination>
 
     </el-tab-pane>
-    <el-tab-pane label="上传图片" name="upload"></el-tab-pane>
+    <el-tab-pane label="上传图片" name="upload">
+      <el-upload class="uploadImg"  action="" :http-request="uploadImg" :show-file-list="false">
+        <i class="el-icon-plus"></i>
+      </el-upload>
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -33,6 +37,17 @@ export default {
     }
   },
   methods: {
+    uploadImg (params) {
+      let data = new FormData()
+      data.append('image', params.file)// 加入参数
+      this.$axios({
+        url: '/user/images',
+        method: 'post',
+        data
+      }).then(res => {
+        this.$emit('selectImg', res.data.url)
+      })
+    },
     // 通过点击事件触发自定义事件传递数据(图片地址)---子传父
     clickImg (url) {
     // 1.通过this.$emit(‘自定义事件名’，若干参数  )   将图将地址传给封面
@@ -74,5 +89,15 @@ export default {
                 height: 100%;
             }
         }
+    }
+    .uploadImg{
+      display:flex;
+      justify-content: center;
+      i{
+        font-size: 50px;
+        padding: 50px;
+        border: 1px dashed #cccccc;
+        border-radius: 4px;
+      }
     }
 </style>
