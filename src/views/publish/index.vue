@@ -17,7 +17,7 @@
                 ></quill-editor>
           </el-form-item>
           <el-form-item style="margin-top:150px" label="封面"  prop='cover'>
-              <el-radio-group change="changeType" v-model="formData.cover.type">
+              <el-radio-group @change="changeType" v-model="formData.cover.type">
                   <el-radio :label="1">单图</el-radio>
                   <el-radio :label="3">三图</el-radio>
                   <el-radio :label="0">无图</el-radio>
@@ -101,23 +101,24 @@ export default {
       // this.formData.cover.images[index] = url// 这种写法错误
       // js限制：vue中利用索引设置一个数组的时候，不能检测数组的变动，也就意味着会造成响应式数据不成功
       // 所以我们需要通过map方法创建一个新数组，监听新数组的数据变化，实现响应式数据
-      this.formData.cover.images = this.formData.cover.images.map(function (item, i) {
-        if (index === i) {
-          // 此时说明找到了要替换的地址
-          return url
-        }
-        // 找不到就返回原先数据
-        return item
-      })
+      // this.formData.cover.images = this.formData.cover.images.map(function (item, i) {
+      //   if (index === i) {
+      //     // 此时说明找到了要替换的地址
+      //     return url
+      //   }
+      //   // 找不到就返回原先数据
+      //   return item
+      // })
+      this.formData.cover.images = this.formData.cover.images.map((item, i) => i === index ? url : item)
     },
     // 点击获取图片
     changeType () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
-        this.formData.cover.images = []// 无图或者空的状态
+        this.formData.cover.images = [] // 无图或者自动
       } else if (this.formData.cover.type === 1) {
-        this.formData.cover.images = ['']// 单图的状态
+        this.formData.cover.images = [''] // 单图
       } else if (this.formData.cover.type === 3) {
-        this.formData.cover.images = ['', '', '']// 三图的状态
+        this.formData.cover.images = ['', '', ''] // 3图
       }
     },
     //   获取所有的频道

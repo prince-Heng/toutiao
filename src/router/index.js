@@ -18,7 +18,8 @@ const routes = [
     }, { path: 'material', component: () => import('../views/material') }, // 文章列表
     { path: 'articles', component: () => import('../views/articles') },
     { path: 'publish', component: () => import('../views/publish') }, // 发布文章
-    { path: 'publish/:articleId', component: () => import('../views/publish') } // 修改文章
+    { path: 'publish/:articleId', component: () => import('../views/publish') }, // 修改文章
+    { path: 'account', component: () => import('../views/account') }// 账户信息
     ]
 
   }, {

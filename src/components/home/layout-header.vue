@@ -6,7 +6,7 @@
        <el-col :span="12" class="right">
            <el-row type="flex" justify="end" align="middle">
                <!-- 当请求的图片不存在时显示默认图片--图片类型为变量的方式/且只能用变量  三元表达式 -->
-               <img :src="!userInfo.photo?userInfo.photo:defaultImg" alt="">
+                 <img :src="userInfo.photo ? userInfo.photo : defaultImg" alt="">
                <el-dropdown @command="goOut">
                    <!-- 匿名插槽 -->
                    <span class="el-dropdown-link">{{userInfo.name}}<i class="el-icon-caret-bottom"></i></span>
@@ -33,9 +33,13 @@ export default {
   },
   methods: {
     goOut (command) {
-      if (command === 'info') {} else if (command === 'git') {} else {
-        window.localStorage.removeItem('user-token')
-        this.$router.push('/login')
+      if (command === 'info') {
+        this.$router.push('/home/account')// 回到发布信息
+      } else if (command === 'git') {
+
+      } else {
+        window.localStorage.removeItem('user-token')// 删除令牌
+        this.$router.push('/login')// 回到登录页
       }
     }
   },
