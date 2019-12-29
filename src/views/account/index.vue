@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading='loading'>
     <bread-crumb slot="header">
         <template slot="title">账户信息</template>
     </bread-crumb>
@@ -20,8 +20,8 @@
         <el-button @click="saveUserInfo" type="primary">保存信息</el-button>
       </el-form-item>
     </el-form>
-    <el-upload class="uploadImg" action="" show-file-list="false">
-      <img :src="formData.photo?formData.photo:defaultImg" alt="">
+    <el-upload :http-request="uploadImg" class="uploadImg" action="" show-file-list="false">
+       <img :src="formData.photo ? formData.photo : defaultImg" alt="">
     </el-upload>
   </el-card>
 </template>
@@ -30,6 +30,7 @@
 export default {
   data () {
     return {
+      loading: false,
       formData: {
         name: '', // 姓名
         intro: '', // 简介
@@ -37,7 +38,7 @@ export default {
         email: '', // 邮箱
         mobile: ''// 手机号
       },
-      defaultImg: require('../../assets/img/22.jpg'),
+      defaultImg: require('../../assets/img/avatar.jpg'),
       rules: {
         name: [{ required: true, message: '用户名不能为空' }, {
           min: 1, max: 7, message: '用户名在1-7个字符之间'
@@ -51,6 +52,20 @@ export default {
     }
   },
   methods: {
+    // 上传头像信息
+    uploadImg (params) {
+      this.loading = true
+      let data = new FormData()
+      data.append('photo', params.file)
+      this.$axios({
+        url: '/user/photo',
+        method: 'patch',
+        data
+      }).then(res => {
+        this.loading = false
+        this.formData.photo = res.data.photo
+      })
+    },
     // 获取用户信息
     getUserInfo () {
       this.$axios({
