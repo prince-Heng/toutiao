@@ -26,7 +26,8 @@
           </el-form-item>
             <!-- 封面组件 -->
               <!-- 父传子  1. 自定义属性传值 -->
-              <cover-image :list="formData.cover.images"></cover-image>
+              <!--@selectImg='receiveImg'  子传父  从cover中传来的自定义事件来接受数据  -->
+              <cover-image @selectImg='receiveImg' :list="formData.cover.images"></cover-image>
           <el-form-item label="频道" prop='channel_id'>
               <el-select  v-model="formData.channel_id">
                   <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -95,6 +96,20 @@ export default {
     // }
   },
   methods: {
+    // 通过cover传来的数据修改图片信息
+    receiveImg (url, index) {
+      // this.formData.cover.images[index] = url// 这种写法错误
+      // js限制：vue中利用索引设置一个数组的时候，不能检测数组的变动，也就意味着会造成响应式数据不成功
+      // 所以我们需要通过map方法创建一个新数组，监听新数组的数据变化，实现响应式数据
+      this.formData.cover.images = this.formData.cover.images.map(function (item, i) {
+        if (index === i) {
+          // 此时说明找到了要替换的地址
+          return url
+        }
+        // 找不到就返回原先数据
+        return item
+      })
+    },
     // 点击获取图片
     changeType () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {

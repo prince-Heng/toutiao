@@ -2,6 +2,7 @@ import layoutAside from '../home/layout-aside.vue'
 import layoutHeader from '../home/layout-header.vue'
 import BreadCrumb from '../conmen/bread-crumb.vue'
 import coverImage from '../publish/cover-images.vue'
+import selectImage from '../publish/select-img.vue'
 import { quillEditor } from 'vue-quill-editor'// quill编辑器的组件对象
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
@@ -13,6 +14,7 @@ export default {
     Vue.component('layout-header', layoutHeader)// 注册全局组件
     Vue.component('bread-crumb', BreadCrumb)// 全局注册面包屑组件  每个组件都可以使用
     Vue.component('quill-editor', quillEditor)// 注册一个全局的富文本编辑器
-    Vue.component('cover-image', coverImage)
+    Vue.component('cover-image', coverImage)// 注册封面组件
+    Vue.component('select-image', selectImage)// 注册弹层
   }
 }
