@@ -11,8 +11,8 @@
     <el-tabs v-model="activeName" @tab-click="changeTab">
       <el-tab-pane name="all" label="全部图片">
         <div class="img-list">
-          <el-card class="img-card" v-for="item in list" :key="item.id" >
-            <img :src="item.url" alt />
+          <el-card class="img-card" v-for="(item,index) in list" :key="item.id" >
+            <img @click="openDialog(index)" :src="item.url" alt />
             <el-row class="operation" align="middle" type="flex" justify="space-around">
               <i @click="collectOrCancel(item)"  :style="{color:item.is_collected ? 'red' : '#000'}" class="el-icon-star-on"></i>
               <i @click="dleMaterial(item.id)" class="el-icon-delete-solid"></i>
@@ -22,8 +22,8 @@
       </el-tab-pane>
       <el-tab-pane name="collect" label="收藏图片">
         <div class="img-list">
-          <el-card class="img-card" v-for="item in list" :key="item.id">
-            <img :src="item.url" alt />
+          <el-card class="img-card" v-for="(item,index) in list" :key="item.id">
+            <img @click="openDialog(index)"  :src="item.url" alt />
           </el-card>
         </div>
       </el-tab-pane>
@@ -38,6 +38,13 @@
         @current-change="changePage"
       ></el-pagination>
     </el-row>
+     <el-dialog @opened="openEnd" :visible="dialogVisible" @close="dialogVisible = false">
+       <el-carousel ref="myCarosel" indicator-position="outside" height="500px">
+         <el-carousel-item v-for="(item,index) in list" :key="index">
+           <img style="width:100%;height:100%" :src="item.url" alt="">
+       </el-carousel-item>
+      </el-carousel>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -52,10 +59,20 @@ export default {
         total: 0,
         pageSize: 8,
         currentPage: 1
-      }
+      },
+      dialogVisible: false,
+      imgIndex: -1
     }
   },
   methods: {
+    openEnd () {
+      this.$refs.myCarosel.setActiveItem(this.imgIndex)
+    },
+    // 打开弹层
+    openDialog (index) {
+      this.dialogVisible = true
+      this.imgIndex = index
+    },
     // 删除
     dleMaterial (id) {
       this.$confirm('您确定要删除图片吗').then(res => {
