@@ -20,13 +20,14 @@
         <el-button @click="saveUserInfo" type="primary">保存信息</el-button>
       </el-form-item>
     </el-form>
-    <el-upload :http-request="uploadImg" class="uploadImg" action="" show-file-list="false">
+    <el-upload :http-request="uploadImg" class="uploadImg" action="" :show-file-list="false">
        <img :src="formData.photo ? formData.photo : defaultImg" alt="">
     </el-upload>
   </el-card>
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
@@ -64,6 +65,8 @@ export default {
       }).then(res => {
         this.loading = false
         this.formData.photo = res.data.photo
+        // 保存成功后需要更新数据将更改的信息告诉头部显示页面
+        eventBus.$emit('updateUserInfo')
       })
     },
     // 获取用户信息
@@ -86,7 +89,10 @@ export default {
           this.$message({
             type: 'success',
             message: '保存用户信息成功'
+
           })
+          // 保存成功后需要更新数据将更改的信息告诉头部显示页面
+          eventBus.$emit('updateUserInfo')
         })
       })
     }

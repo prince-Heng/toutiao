@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
@@ -32,6 +33,17 @@ export default {
     }
   },
   methods: {
+    getUserInfo () {
+      let token = localStorage.getItem('user-token')
+      this.$axios({
+        url: '/user/profile',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+        this.userInfo = res.data
+      })
+    },
     goOut (command) {
       if (command === 'info') {
         this.$router.push('/home/account')// 回到发布信息
@@ -44,14 +56,10 @@ export default {
     }
   },
   created () {
-    let token = localStorage.getItem('user-token')
-    this.$axios({
-      url: '/user/profile',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then(res => {
-      this.userInfo = res.data
+    this.getUserInfo()
+    // 接收到信息
+    eventBus.$on('updateUserInfo', () => {
+      this.getUserInfo()
     })
   }
 }
