@@ -1,7 +1,7 @@
 <template>
    <el-row class="layout-header" type='flex' align="middle">
        <el-col :span="12" class="left">
-           <i class="el-icon-s-fold"> <span>江苏传智播客教育科技股份有限公司</span></i>
+           <i @click='clickCollapse' :class="{'el-icon-s-unfold':collapse,'el-icon-s-fold':!collapse}"> <span>江苏传智播客教育科技股份有限公司</span></i>
        </el-col>
        <el-col :span="12" class="right">
            <el-row type="flex" justify="end" align="middle">
@@ -26,6 +26,8 @@ import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
+      // 默认展开
+      collapse: false,
       // 定义一个对象接收参数
       userInfo: {},
       // 定义一个图片的变量
@@ -33,6 +35,10 @@ export default {
     }
   },
   methods: {
+    clickCollapse () {
+      this.collapse = !this.collapse
+      eventBus.$emit('setCollapse')
+    },
     getUserInfo () {
       let token = localStorage.getItem('user-token')
       this.$axios({
